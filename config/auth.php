@@ -38,7 +38,15 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
+            'provider' => 'users', // Use the 'admins' provider for web guard
+        ],
+        'api' => [
+            'driver' => 'jwt',
             'provider' => 'users',
+        ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
         ],
     ],
 
@@ -65,9 +73,9 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
+        // 'admins' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\Admin\Admin::class, // Use the 'admins' model for the 'admins' provider
         // ],
     ],
 
@@ -97,8 +105,8 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        // Add more password reset configurations if needed for different user types
     ],
-
     /*
     |--------------------------------------------------------------------------
     | Password Confirmation Timeout
