@@ -15,10 +15,12 @@ use Carbon\Carbon;
 class UserAuthController extends Controller
 {
     protected $guard = 'api';
+
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
+
     public function login(Request $request)
     {
         $data = $request->all();
@@ -30,7 +32,7 @@ class UserAuthController extends Controller
             return response()->json(array('msg' => 'error', 'response' => $validator->errors(), 422));
         }
         $credentials = [
-            'phone_no' => $data['phone_no'],
+            'username' => $data['username'],
             'password' => $data['password'],
         ];
         if ($token = auth()->attempt($credentials)) {
@@ -58,6 +60,7 @@ class UserAuthController extends Controller
         }
         return response()->json(['msg' => 'error', 'response' => 'Invalid credentials!'], 401);
     }
+
     public function register(Request $request)
     {
         // dd($request->all());
@@ -102,6 +105,7 @@ class UserAuthController extends Controller
             return response()->json(['msg' => 'error', 'response' => 'Something went wrong! Could Not Create User.']);
         }
     }
+
     function generateOTP()
     {
         $otp = mt_rand(100000, 999999);
@@ -112,20 +116,24 @@ class UserAuthController extends Controller
 
         return $otp;
     }
+
     public function user_profile()
     {
         $user = auth()->user();
         return response()->json(['msg' => 'success', 'response' => 'success', 'data' => $user]);
     }
+
     public function logout()
     {
         auth()->logout();
         return response()->json(['msg' => 'success', 'response' => 'Successfully logged out']);
     }
+
     public function refresh()
     {
         return $this->respondWithToken(auth()->refresh());
     }
+
     protected function respondWithToken($token)
     {
         return response()->json([
@@ -135,6 +143,7 @@ class UserAuthController extends Controller
             // 'expires_in' => JWTAuth::factory()->getTTL() * 2880,
         ]);
     }
+
 }
 
 // Users Table:
