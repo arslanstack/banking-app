@@ -145,30 +145,3 @@ class UserAuthController extends Controller
     }
 
 }
-
-// Users Table:
-// id (Primary Key)
-// name
-// email
-// phone
-// ssn
-// username
-// password
-// address
-// card_no
-
-// Accounts Table:
-// id (Primary Key)
-// user_id (Foreign Key referencing Users Table)
-// account_number
-// balance
-
-// Transactions Table:
-// id (Primary Key)
-// account_id (Foreign Key referencing Accounts Table)
-// txn_date
-// txn_type (e.g., 'deposit', 'withdrawal', 'transfer')
-// amount
-// sender_account_id (Foreign Key referencing Accounts Table)
-// receiver_account_id (Foreign Key referencing Accounts Table)
-// post_balance
