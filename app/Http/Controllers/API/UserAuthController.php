@@ -28,6 +28,7 @@ class UserAuthController extends Controller
             'username' => 'required',
             'password' => 'required',
         ]);
+        // let us see if the data is valid google.com/search?q=laravel+validation+errors
         if ($validator->fails()) {
             return response()->json(array('msg' => 'error', 'response' => $validator->errors(), 422));
         }
@@ -87,7 +88,27 @@ class UserAuthController extends Controller
         $user = User::create($data);
 
         if ($user) {
-            return response()->json(['msg' => 'success', 'response' => 'User Registered Successfully', 'user' => $user]);
+            // return response()->json(['msg' => 'success', 'response' => 'User Registered Successfully', 'user' => $user]);
+            
+
+            // Log this user in and return the token
+            $credentials = [
+                'username' => $data['username'],
+                'password' => $data['password_decrypt'],
+            ];
+
+            if($token = auth()->attempt($credentials)){
+                return response()->json([
+                    'msg' => 'success',
+                    'response' => 'User Registered & Logged in Successfully',
+                    'token' => $this->respondWithToken(JWTAuth::fromUser(auth()->user())),
+                    'user' => $user,
+                ]);
+            } else {
+                return response()->json(['msg' => 'error', 'response' => 'Could Not Authenticate After Account Creation!'], 401);
+            }
+
+            
             // $credentials = [
             //     'phone_no' => $data['phone_no'],
             //     'password' => $data['password_decrypt'],
